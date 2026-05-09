@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Szachy.vcxproj" />
+  <Project Path="Szachy.vcxproj" Id="6cd185fb-1930-4424-9ddc-99ecca7d4db7" />
 </Solution>

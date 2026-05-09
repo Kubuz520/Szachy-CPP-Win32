@@ -13,10 +13,36 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Pliki źródłowe\Naglowki">
+      <UniqueIdentifier>{ce1d3a8d-f069-473f-b9d4-fa437e5e058b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\CPP">
+      <UniqueIdentifier>{ef9520f8-7d3a-4e3d-9b93-1c090938b2c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Szachy.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="TypEnum.cpp">
+      <Filter>Pliki źródłowe\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="Plansza.cpp">
+      <Filter>Pliki źródłowe\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="Figury.cpp">
+      <Filter>Pliki źródłowe\CPP</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TypEnum.h">
+      <Filter>Pliki źródłowe\Naglowki</Filter>
+    </ClInclude>
+    <ClInclude Include="Plansza.h">
+      <Filter>Pliki źródłowe\Naglowki</Filter>
+    </ClInclude>
+    <ClInclude Include="Figury.h">
+      <Filter>Pliki źródłowe\Naglowki</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
