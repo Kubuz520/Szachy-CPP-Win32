@@ -128,12 +128,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Figury.cpp" />
+    <ClCompile Include="Global.cpp" />
     <ClCompile Include="Plansza.cpp" />
     <ClCompile Include="Szachy.cpp" />
     <ClCompile Include="TypEnum.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Figury.h" />
+    <ClInclude Include="Global.h" />
     <ClInclude Include="Plansza.h" />
     <ClInclude Include="TypEnum.h" />
   </ItemGroup>

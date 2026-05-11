@@ -6,16 +6,17 @@
 class Figura {
 
 protected:
-	Typ typ;
-	bool isWhite;
-	int x;
-	int y;
+	Typ typ{};
+	bool isWhite{};
+	int x{};
+	int y{};
 
 public: 
-	virtual void Ruch() = 0;
-	virtual void Bicie() = 0;
+	virtual void Ruch(Figura* plansza[][8]) = 0;
 
 	void Show();
+	Typ GetType(int x1, int y1);
+	bool GetIsWhite(int x1, int y1);
 };
 
 // Klasa Pustego Pola
@@ -23,8 +24,7 @@ class PustePole : public Figura {
 
 public:
 	PustePole(int x, int y);
-	void Ruch();
-	void Bicie();
+	void Ruch(Figura* plansza[][8]);
 };
 
 // Klasa Pionka
@@ -35,7 +35,7 @@ private:
 
 public:
 	Pionek(int x, int y, bool isWhite);
-	void Ruch();
+	void Ruch(Figura* plansza[][8]);
 	void Bicie();
 };
 
@@ -44,8 +44,7 @@ class Skoczek : public Figura {
 
 public:
 	Skoczek(int x, int y, bool isWhite);
-	void Ruch();
-	void Bicie();
+	void Ruch(Figura* plansza[][8]);
 };
 
 // Klasa Wieży
@@ -56,8 +55,7 @@ private:
 
 public:
 	Wieza(int x, int y, bool isWhite);
-	void Ruch();
-	void Bicie();
+	void Ruch(Figura* plansza[][8]);
 };
 
 // Klasa Gońca
@@ -65,8 +63,7 @@ class Goniec : public Figura {
 
 public:
 	Goniec(int x, int y, bool isWhite);
-	void Ruch();
-	void Bicie();
+	void Ruch(Figura* plansza[][8]);
 };
 
 // Klasa Hetmana
@@ -77,8 +74,7 @@ private:
 
 public:
 	Hetman(int x, int y, bool isWhite);
-	void Ruch();
-	void Bicie();
+	void Ruch(Figura* plansza[][8]);
 };
 
 // Klasa Króla
@@ -89,6 +85,5 @@ private:
 
 public:
 	Krol(int x, int y, bool isWhite);
-	void Ruch();
-	void Bicie();
+	void Ruch(Figura* plansza[][8]);
 };

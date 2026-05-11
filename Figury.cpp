@@ -2,41 +2,77 @@
 #include "Figury.h"
 
 #include "TypEnum.h"
+#include "Global.h"
+#include "Plansza.h"
 #include <iostream>
+
+int IsWhite(bool iswhite) {
+	if (iswhite == true) {
+		return -1;
+	}
+	else {
+		return 1;
+	}
+}
+
+bool isLegalMove(int x, int y) {
+	// Implementacja sprawdzania legalności ruchu
+	return true; // Placeholder
+}
+
+void AddToPossibleMoves(int x1, int y1) {
+	if (x1 <= 7 && x1 >= 0 && y1 <= 7 && x1 >= 0) {
+		PossibleMoves[ilosc] = new PossibleMove{ x1, y1, isLegalMove(x1,y1) };
+		ilosc++;
+	}
+}
+
 
 // Funkcje Klasy Figura ---
 void Figura::Show() {
 	std::cout << GetTyp(typ);
 }
 
+Typ Figura::GetType(int x1, int y1) {
+	if (x1 <= 7 && x1 >= 0 && y1 <= 7 && x1 >= 0) {
+		return typ;
+	}
+}
+
+bool Figura::GetIsWhite(int x1, int y1) {
+	if (x1 <= 7 && x1 >= 0 && y1 <= 7 && x1 >= 0) {
+		return isWhite;
+	}
+}
 
 // Funkcje Klasy PustePole ---
-PustePole::PustePole(int x, int y) {
+PustePole::PustePole(int x1, int y1) {
 	typ = Typ::PUSTEPOLE;
-	this->x = x;
-	this->y = y;
+	x1 = x;
+	y1 = y;
 }
 
-void PustePole::Ruch() {
+void PustePole::Ruch(Figura* plansza[][8]) {
 	// Implementacja ruchu
-}
-
-void PustePole::Bicie() {
-	// Implementacja Bicia
 }
 
 
 // Funkcje Klasy Pionek ---
-Pionek::Pionek(int x, int y, bool isWhite) {
+Pionek::Pionek(int x1, int y1, bool isWhite1) {
 	typ = Typ::PIONEK;
 	FirstMove = true;
-	this->x = x;
-	this->y = y;
-	this->isWhite = isWhite;
+	x1 = x;
+	y1 = y;
+	isWhite1 = isWhite;
 }
 
-void Pionek::Ruch() {
-	// Implementacja ruchu
+void Pionek::Ruch(Figura* plansza[][8]) {
+	ilosc = 0;
+	std::cout << "Ruch Pionka\n";
+	if (FirstMove == true) {
+		AddToPossibleMoves(x, y + (IsWhite(isWhite) * 2));
+	}
+	AddToPossibleMoves(x, y + IsWhite(isWhite));
 }
 
 void Pionek::Bicie() {
@@ -45,88 +81,114 @@ void Pionek::Bicie() {
 
 
 // Funkcje Klasy Skoczek ---
-Skoczek::Skoczek(int x, int y, bool isWhite) {
+Skoczek::Skoczek(int x1, int y1, bool isWhite1) {
 	typ = Typ::SKOCZEK;
-	this->x = x;
-	this->y = y;
-	this->isWhite = isWhite;
+	x1 = x;
+	y1 = y;
+	isWhite1 = isWhite;
 }
 
-void Skoczek::Ruch() {
-	// Implementacja ruchu
-}
+void Skoczek::Ruch(Figura* plansza[][8]) {
+	ilosc = 0;
+	std::cout << "Ruch Skoczka\n";
+	AddToPossibleMoves(x + 2, y + 1);
+	AddToPossibleMoves(x + 2, y - 1);
 
-void Skoczek::Bicie() {
-	// Implementacja Bicia
+	AddToPossibleMoves(x - 2, y + 1);
+	AddToPossibleMoves(x - 2, y - 1);
+
+	AddToPossibleMoves(x + 1, y + 2);
+	AddToPossibleMoves(x - 1, y + 2);
+
+	AddToPossibleMoves(x + 1, y - 2);
+	AddToPossibleMoves(x - 1, y - 2);
 }
 
 
 // Funkcje Klasy Goniec ---
-Goniec::Goniec(int x, int y, bool isWhite) {
+Goniec::Goniec(int x1, int y1, bool isWhite1) {
 	typ = Typ::GONIEC;
-	this->x = x;
-	this->y = y;
-	this->isWhite = isWhite;
+	x1 = x;
+	y1 = y;
+	isWhite1 = isWhite;
 }
 
-void Goniec::Ruch() {
+void Goniec::Ruch(Figura* plansza[][8]) {
 	// Implementacja ruchu
-}
-
-void Goniec::Bicie() {
-	// Implementacja Bicia
 }
 
 
 // Funkcje Klasy Wieza ---
-Wieza::Wieza(int x, int y, bool isWhite) {
+Wieza::Wieza(int x1, int y1, bool isWhite1) {
 	typ = Typ::WIEZA;
 	FirstMove = true;
-	this->x = x;
-	this->y = y;
-	this->isWhite = isWhite;
+	x1 = x;
+	y1 = y;
+	isWhite1 = isWhite;
 }
 
-void Wieza::Ruch() {
-	// Implementacja ruchu
-}
-
-void Wieza::Bicie() {
-	// Implementacja Bicia
+void Wieza::Ruch(Figura* plansza[][8]) {
+	for (int i{1}; i < 8; i++) {
+		if (plansza[x + i][y]->GetType(x+1,y) != Typ::PUSTEPOLE) {
+			break;
+		}
+		AddToPossibleMoves(x + i, y);
+		
+	}
+	for (int i{ 1 }; i < 8; i++) {
+		if (plansza[x - i][y]->GetType(x-1,y) != Typ::PUSTEPOLE) {
+			break;
+		}
+		AddToPossibleMoves(x - i, y);
+	}
+	for (int i{ 1 }; i < 8; i++) {
+		if (plansza[x][y + 1]->GetType(x,y+1) != Typ::PUSTEPOLE) {
+			break;
+		}
+		AddToPossibleMoves(x, y + i);
+	}
+	for (int i{ 1 }; i < 8; i++) {
+		if (plansza[x][y - i]->GetType(x,y-1) != Typ::PUSTEPOLE) {
+			break;
+		}
+		AddToPossibleMoves(x, y - i);
+	}
 }
 
 
 // Funkcje Klasy Hetman ---
-Hetman::Hetman(int x, int y, bool isWhite) {
+Hetman::Hetman(int x1, int y1, bool isWhite1) {
 	typ = Typ::HETMAN;
 	FirstMove = true;
-	this->x = x;
-	this->y = y;
-	this->isWhite = isWhite;
+	x1 = x;
+	y1 = y;
+	isWhite1 = isWhite;
 }
 
-void Hetman::Ruch() {
+void Hetman::Ruch(Figura* plansza[][8]) {
 	// Implementacja ruchu
-}
-
-void Hetman::Bicie() {
-	// Implementacja Bicia
 }
 
 
 // Funkcje Klasy Krol ---
-Krol::Krol(int x, int y, bool isWhite) {
+Krol::Krol(int x1, int y1, bool isWhite1) {
 	typ = Typ::KROL;
 	FirstMove = true;
-	this->x = x;
-	this->y = y;
-	this->isWhite = isWhite;
+	x1 = x;
+	y1 = y;
+	isWhite1 = isWhite;
 }
 
-void Krol::Ruch() {
-	// Implementacja ruchu
-}
+void Krol::Ruch(Figura* plansza[][8]) {
+	AddToPossibleMoves(x, y + 1);
+	AddToPossibleMoves(x, y - 1);
 
-void Krol::Bicie() {
-	// Implementacja Bicia
+	AddToPossibleMoves(x + 1, y);
+	AddToPossibleMoves(x - 1, y);
+
+	AddToPossibleMoves(x + 1, y + 1);
+	AddToPossibleMoves(x - 1, y - 1);
+
+	AddToPossibleMoves(x + 1, y - 1);
+	AddToPossibleMoves(x - 1, y + 1);
 }
