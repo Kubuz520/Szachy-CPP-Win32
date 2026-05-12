@@ -5,5 +5,5 @@
 
 void PossibleMove::Show()
 {
-	std::cout << "x: " << x << " y: " << y << " legal: " << legal << "\n";
+	std::cout << "x: " << x << " y: " << y << "\n";
 }

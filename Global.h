@@ -3,7 +3,6 @@
 struct PossibleMove {
 	int x;
 	int y;
-	bool legal;
 
 public:
 	void Show();

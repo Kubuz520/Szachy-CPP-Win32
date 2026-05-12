@@ -15,8 +15,8 @@ public:
 	virtual void Ruch(Figura* plansza[][8]) = 0;
 
 	void Show();
-	Typ GetType(int x1, int y1);
-	bool GetIsWhite(int x1, int y1);
+	Typ GetType();
+	bool GetIsWhite();
 };
 
 // Klasa Pustego Pola

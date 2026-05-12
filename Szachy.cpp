@@ -25,7 +25,7 @@ int main()
 		std::cin >> x;
 		std::cout << "Podaj wspolrzedna figury Y: " << "\n";
 		std::cin >> y;
-		plansza.GetFigura(x - 1, y - 1)->Ruch(plansza.plansza);
+		plansza.GetFigura(x , y )->Ruch(plansza.plansza);
 		ShowPossibleMoves();
 	} while (true);
 	
