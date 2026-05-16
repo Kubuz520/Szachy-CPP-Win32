@@ -6,6 +6,9 @@
 #include "Plansza.h"
 #include <iostream>
 
+// Funckje Globalne ---
+
+// funkcja zwracająca -1 dla białych i 1 dla czarnych, ułatwiająca obliczenia ruchów pionków
 int FuncIsWhite(bool iswhite) {
 	if (iswhite == true) {
 		return -1;
@@ -15,6 +18,7 @@ int FuncIsWhite(bool iswhite) {
 	}
 }
 
+// funkcja sprawdzająca czy pole docelowe jest puste lub zajęte przez figurę przeciwnego koloru
 bool isLegalMove(int x, int y, bool IsSetFiguraWhite, Figura* plansza[][8]) {
 	if (plansza[x][y]->GetType() == Typ::PUSTEPOLE) {
 		return true;
@@ -27,11 +31,13 @@ bool isLegalMove(int x, int y, bool IsSetFiguraWhite, Figura* plansza[][8]) {
 	}
 }
 
+// funkcja dodająca możliwy ruch do tablicy PossibleMoves
 void AddToPossibleMoves(int x1, int y1) {
 	PossibleMoves[ilosc] = new PossibleMove{ x1, y1};
 	ilosc++;
 }
 
+// funkcja sprawdzająca czy pole docelowe jest na planszy
 bool IsMoveOnBoard(int x1, int y1) {
 	if (x1 <= 7 && x1 >= 0 && y1 <= 7 && y1 >= 0) {
 		return true;
@@ -41,54 +47,48 @@ bool IsMoveOnBoard(int x1, int y1) {
 	}
 }
 
+// funkcja obsługująca ruchy w pionie i poziomie
 void VerticalHorizontalMove(int x, int y, bool isWhite, Figura* plansza[][8]) {
-	for (int i{ 1 }; i < 8; i++) {
-		if (IsMoveOnBoard(x + i, y) == false) {
-			break;
-		}
-		if (isLegalMove(x + i, y, isWhite, plansza) == false) {
-			break;
-		}
-		AddToPossibleMoves(x + i, y);
-		if (plansza[x + i][y]->GetType() != Typ::PUSTEPOLE) {
-			break;
-		}
+	int offset[4][2] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
 
-	}
-	for (int i{ 1 }; i < 8; i++) {
-		if (IsMoveOnBoard(x - i, y) == false) {
-			break;
-		}
-		if (isLegalMove(x - i, y, isWhite, plansza) == false) {
-			break;
-		}
-		AddToPossibleMoves(x - i, y);
-		if (plansza[x - i][y]->GetType() != Typ::PUSTEPOLE) {
-			break;
-		}
-	}
-	for (int i{ 1 }; i < 8; i++) {
-		if (IsMoveOnBoard(x, y + i) == false) {
-			break;
-		}
-		if (isLegalMove(x, y + i, isWhite, plansza) == false) {
-			break;
-		}
-		AddToPossibleMoves(x, y + i);
-		if (plansza[x][y + i]->GetType() != Typ::PUSTEPOLE) {
-			break;
+	// Ruch w prawo, lewo, do góry i do dołu
+	for (int j{ 0 }; j < 4; j++) {
+		for (int i{ 1 }; i < 8; i++) {
+			if (IsMoveOnBoard(x + (offset[j][0] * i), y + (offset[j][1] * i)) == false) {
+				continue;
+			}
+			if (isLegalMove(x + (offset[j][0] * i), y + (offset[j][1] * i), isWhite, plansza) == false) {
+				continue;
+			}
+			AddToPossibleMoves(x + (offset[j][0] * i), y + (offset[j][1] * i));
+			if (plansza[x + (offset[j][0] * i)][y + (offset[j][1] * i)]->GetType() != Typ::PUSTEPOLE) {
+				j++;
+				i = 0;
+				continue;
+			}
 		}
 	}
-	for (int i{ 1 }; i < 8; i++) {
-		if (IsMoveOnBoard(x, y - i) == false) {
-			break;
-		}
-		if (isLegalMove(x, y - i, isWhite, plansza) == false) {
-			break;
-		}
-		AddToPossibleMoves(x, y - i);
-		if (plansza[x][y - i]->GetType() != Typ::PUSTEPOLE) {
-			break;
+}
+
+// funkcja obsługująca ruchy po przekątnej
+void SkosyMove(int x, int y, bool isWhite, Figura* plansza[][8]) {
+	int offset[4][2] = { {1, 1}, {1, -1}, {-1, 1}, {-1, -1} };
+	
+	// Skosy
+	for (int j{ 0 }; j < 4; j++) {
+		for (int i{ 0 }; i < 8; i++) {
+			if (IsMoveOnBoard(x + (offset[j][0] * i), y + (offset[j][1] * i)) == false) {
+				continue;
+			}
+			if (isLegalMove(x + (offset[j][0] * i), y + (offset[j][1] * i), isWhite, plansza) == false) {
+				continue;
+			}
+			AddToPossibleMoves(x + (offset[j][0] * i), y + (offset[j][1] * i));
+			if (plansza[x + (offset[j][0] * i)][y + (offset[j][1] * i)]->GetType() != Typ::PUSTEPOLE) {
+				j++;
+				i = 0;
+				continue;
+			}
 		}
 	}
 }
@@ -193,7 +193,10 @@ Goniec::Goniec(int x1, int y1, bool isWhite1) {
 }
 
 void Goniec::Ruch(Figura* plansza[][8]) {
+	ilosc = 0;
+	std::cout << "Ruch Gonca\n";
 	// Ruch po przekątnej
+	SkosyMove(x, y, isWhite, plansza);
 }
 
 
@@ -224,9 +227,12 @@ Hetman::Hetman(int x1, int y1, bool isWhite1) {
 }
 
 void Hetman::Ruch(Figura* plansza[][8]) {
+	ilosc = 0;
+	std::cout << "Ruch Hetmana\n";
 	// Ruch w prawo, lewo, do góry i do dołu
 	VerticalHorizontalMove(x, y, isWhite, plansza);
 	// Ruch po przekątnej
+	SkosyMove(x, y, isWhite, plansza);
 }
 
 

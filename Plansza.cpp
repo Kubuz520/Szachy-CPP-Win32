@@ -14,7 +14,7 @@ Plansza::Plansza() {
 	plansza[6][0] = new Skoczek(6, 0, false);
 	plansza[7][0] = new Wieza(7, 0, false);
 
-	plansza[0][1] = new PustePole(0, 1);
+	plansza[0][1] = new Pionek(0, 1, false);
 	plansza[1][1] = new Pionek(1, 1, false);
 	plansza[2][1] = new Pionek(2, 1, false);
 	plansza[3][1] = new Pionek(3, 1, false);
