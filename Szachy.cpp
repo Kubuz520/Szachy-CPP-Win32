@@ -17,6 +17,7 @@ int main()
 	Plansza plansza;
 
 	do {
+		ilosc = 0;
 		plansza.ShowAll();
 		int x{};
 		int y{};
