@@ -30,13 +30,11 @@ public:
 // Klasa Pionka
 class Pionek : public Figura {
 
-private:
-	bool FirstMove;
-
 public:
-	Pionek(int x, int y, bool isWhite);
+	int MoveNumber;
+
+	Pionek(int x, int y, bool isWhite, int movenumber);
 	void Ruch(Figura* plansza[][8]);
-	void Bicie();
 };
 
 // Klasa Skoczka

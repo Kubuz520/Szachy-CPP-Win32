@@ -31,8 +31,8 @@ bool isLegalMove(int x, int y, bool IsSetFiguraWhite, Figura* plansza[][8]) {
 }
 
 // funkcja dodająca możliwy ruch do tablicy PossibleMoves
-void AddToPossibleMoves(int x1, int y1) {
-	PossibleMoves[ilosc] = new PossibleMove{ x1, y1};
+void AddToPossibleMoves(int x1, int y1, bool castles = false, bool enpassant = false) {
+	PossibleMoves[ilosc] = new PossibleMove{ x1, y1, castles};
 	ilosc++;
 }
 
@@ -46,7 +46,9 @@ bool IsMoveOnBoard(int x1, int y1) {
 	}
 }
 
+
 // ############### Funkcje Ruchów ###############
+
 
 // funkcja obsługująca ruchy w pionie i poziomie
 void VerticalHorizontalMove(int x, int y, bool isWhite, Figura* plansza[][8]) {
@@ -94,7 +96,41 @@ void SkosyMove(int x, int y, bool isWhite, Figura* plansza[][8]) {
 	}
 }
 
-// funkcja Roszady
+// funkcje Bicia Pionka
+void EnPassant(int x, int y, Figura* plansza[][8], bool iswhite) {
+
+	if (x < 7) {
+		Pionek* p = dynamic_cast<Pionek*>(plansza[x + 1][y]);
+		if (p != nullptr) {
+			if (p->MoveNumber == 1 && p->GetIsWhite() != iswhite) {
+				AddToPossibleMoves(x + 1, y + FuncIsWhite(iswhite), false, true);
+			}
+		}
+	}
+	if (x > 0) {
+		Pionek* l = dynamic_cast<Pionek*>(plansza[x - 1][y]);
+		if (l != nullptr) {
+			if (l->MoveNumber == 1 && l->GetIsWhite() != iswhite) {
+				AddToPossibleMoves(x - 1, y + FuncIsWhite(iswhite), false, true);
+			}
+		}
+	}
+
+}
+void PawnCapture(int x, int y, Figura* plansza[][8], bool iswhite) {
+
+	// lewo
+	if (plansza[x - 1][y + FuncIsWhite(iswhite)]->GetType() != Typ::PUSTEPOLE && x > 0 && iswhite != plansza[x - 1][y + FuncIsWhite(iswhite)]->GetIsWhite()) {
+		AddToPossibleMoves(x - 1, y + FuncIsWhite(iswhite));
+	}
+	// prawo
+	if (plansza[x + 1][y + FuncIsWhite(iswhite)]->GetType() != Typ::PUSTEPOLE && x < 7 && iswhite != plansza[x + 1][y + FuncIsWhite(iswhite)]->GetIsWhite()) {
+		AddToPossibleMoves(x + 1, y + FuncIsWhite(iswhite));
+	}
+	EnPassant(x, y, plansza, iswhite);
+}
+
+// funkcje Roszady ----
 // Lewa Roszada
 void CastlesLeft(int x, int y, Figura* plansza[][8]) {
 	
@@ -112,7 +148,7 @@ void CastlesLeft(int x, int y, Figura* plansza[][8]) {
 			return;
 		}
 	}
-	AddToPossibleMoves(0, y);
+	AddToPossibleMoves(0, y, true);
 }
 
 // Prawa Roszada
@@ -132,7 +168,7 @@ void CastlesRight(int x, int y, Figura* plansza[][8]) {
 			return;
 		}
 	}
-	AddToPossibleMoves(7, y);
+	AddToPossibleMoves(7, y, true);
 }
 
 void Castles(int x, int y, Figura* plansza[][8]) {
@@ -148,7 +184,9 @@ void Castles(int x, int y, Figura* plansza[][8]) {
 	CastlesRight(x, y, plansza);
 }
 
+
 // ############### Funkcje Klas ###############
+
 
 // Funkcje Klasy Figura ---
 void Figura::Show() {
@@ -176,12 +214,12 @@ void PustePole::Ruch(Figura* plansza[][8]) {
 
 
 // Funkcje Klasy Pionek ---
-Pionek::Pionek(int x1, int y1, bool isWhite1) {
+Pionek::Pionek(int x1, int y1, bool isWhite1, int movenumber1) {
 	typ = Typ::PIONEK;
-	FirstMove = true;
 	x = x1;
 	y = y1;
 	isWhite = isWhite1;
+	MoveNumber = movenumber1;
 }
 
 void Pionek::Ruch(Figura* plansza[][8]) {
@@ -189,7 +227,7 @@ void Pionek::Ruch(Figura* plansza[][8]) {
 	std::cout << "Ruch Pionka\n";
 
 	// Ruch o 2 pola do przodu
-	if (FirstMove == true) {
+	if (MoveNumber == 0) {
 		if (IsMoveOnBoard(x, y + (FuncIsWhite(isWhite) * 2)) == false) {
 			return;
 		}
@@ -206,10 +244,9 @@ void Pionek::Ruch(Figura* plansza[][8]) {
 		return;
 	}
 	AddToPossibleMoves(x, y + FuncIsWhite(isWhite));
-}
 
-void Pionek::Bicie() {
-	// Implementacja Bicia
+	// Bicie Pionka
+	PawnCapture(x, y, plansza, isWhite);
 }
 
 

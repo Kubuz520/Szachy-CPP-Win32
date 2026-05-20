@@ -3,6 +3,8 @@
 struct PossibleMove {
 	int x;
 	int y;
+	bool castles;
+	bool enpassant;
 
 public:
 	void Show();
