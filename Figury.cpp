@@ -1,4 +1,3 @@
-
 #include "Figury.h"
 
 #include "TypEnum.h"
@@ -47,6 +46,8 @@ bool IsMoveOnBoard(int x1, int y1) {
 	}
 }
 
+// ############### Funkcje Ruchów ###############
+
 // funkcja obsługująca ruchy w pionie i poziomie
 void VerticalHorizontalMove(int x, int y, bool isWhite, Figura* plansza[][8]) {
 	int offset[4][2] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
@@ -92,6 +93,62 @@ void SkosyMove(int x, int y, bool isWhite, Figura* plansza[][8]) {
 		}
 	}
 }
+
+// funkcja Roszady
+// Lewa Roszada
+void CastlesLeft(int x, int y, Figura* plansza[][8]) {
+	
+	Wieza* w1 = dynamic_cast<Wieza*>(plansza[0][y]);
+
+	if (w1 == nullptr) {
+		return;
+	}
+	else if (w1->GetHasMoved() == true) {
+		return;
+	}
+
+	for (int i{ 1 };i < x;i++) {
+		if (plansza[i][y]->GetType() != Typ::PUSTEPOLE) {
+			return;
+		}
+	}
+	AddToPossibleMoves(0, y);
+}
+
+// Prawa Roszada
+void CastlesRight(int x, int y, Figura* plansza[][8]) {
+	
+	Wieza* w2 = dynamic_cast<Wieza*>(plansza[7][y]);
+
+	if (w2 == nullptr) {
+		return;
+	}
+	else if (w2->GetHasMoved() == true) {
+		return;
+	}
+
+	for (int i{ x + 1 };i < 7;i++) {
+		if (plansza[i][y]->GetType() != Typ::PUSTEPOLE) {
+			return;
+		}
+	}
+	AddToPossibleMoves(7, y);
+}
+
+void Castles(int x, int y, Figura* plansza[][8]) {
+
+	// Sprawdza czy krol sie ruszyl
+	Krol* k = reinterpret_cast<Krol*>(plansza[x][y]);
+	if (k->GetHasMoved() == true) {
+		return;
+	}
+	
+	// Sprawdza czy wieze sie ruszyly i czy pola miedzy nimi sa puste
+	CastlesLeft(x, y, plansza);
+	CastlesRight(x, y, plansza);
+}
+
+// ############### Funkcje Klas ###############
 
 // Funkcje Klasy Figura ---
 void Figura::Show() {
@@ -199,14 +256,13 @@ void Goniec::Ruch(Figura* plansza[][8]) {
 	SkosyMove(x, y, isWhite, plansza);
 }
 
-
 // Funkcje Klasy Wieza ---
-Wieza::Wieza(int x1, int y1, bool isWhite1) {
+Wieza::Wieza(int x1, int y1, bool isWhite1, bool hasmoved1) {
 	typ = Typ::WIEZA;
-	FirstMove = true;
 	x = x1;
 	y = y1;
 	isWhite = isWhite1;
+	HasMoved = hasmoved1;
 }
 
 void Wieza::Ruch(Figura* plansza[][8]) {
@@ -216,11 +272,13 @@ void Wieza::Ruch(Figura* plansza[][8]) {
 	VerticalHorizontalMove(x, y, isWhite, plansza);
 }
 
+bool Wieza::GetHasMoved() {
+	return HasMoved;
+}
 
 // Funkcje Klasy Hetman ---
 Hetman::Hetman(int x1, int y1, bool isWhite1) {
 	typ = Typ::HETMAN;
-	FirstMove = true;
 	x = x1;
 	y = y1;
 	isWhite = isWhite1;
@@ -237,12 +295,12 @@ void Hetman::Ruch(Figura* plansza[][8]) {
 
 
 // Funkcje Klasy Krol ---
-Krol::Krol(int x1, int y1, bool isWhite1) {
+Krol::Krol(int x1, int y1, bool isWhite1, bool hasmoved1) {
 	typ = Typ::KROL;
-	FirstMove = true;
 	x = x1;
 	y = y1;
 	isWhite = isWhite1;
+	HasMoved = hasmoved1;
 }
 
 void Krol::Ruch(Figura* plansza[][8]) {
@@ -259,4 +317,9 @@ void Krol::Ruch(Figura* plansza[][8]) {
 		}
 		AddToPossibleMoves(x + offset[i][0], y + offset[i][1]);
 	}
+	Castles(x, y, plansza);
+}
+
+bool Krol::GetHasMoved() {
+	return HasMoved;
 }

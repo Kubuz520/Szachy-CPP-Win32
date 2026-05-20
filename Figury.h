@@ -50,12 +50,12 @@ public:
 // Klasa Wieży
 class Wieza : public Figura {
 
-private:
-	bool FirstMove;
-
 public:
-	Wieza(int x, int y, bool isWhite);
+	bool HasMoved;
+
+	Wieza(int x, int y, bool isWhite, bool hasmoved);
 	void Ruch(Figura* plansza[][8]);
+	bool GetHasMoved();
 };
 
 // Klasa Gońca
@@ -69,9 +69,6 @@ public:
 // Klasa Hetmana
 class Hetman : public Figura {
 
-private:
-	bool FirstMove;
-
 public:
 	Hetman(int x, int y, bool isWhite);
 	void Ruch(Figura* plansza[][8]);
@@ -80,10 +77,10 @@ public:
 // Klasa Króla
 class Krol : public Figura {
 
-private:
-	bool FirstMove;
-
 public:
-	Krol(int x, int y, bool isWhite);
+	bool HasMoved;
+
+	Krol(int x, int y, bool isWhite, bool hasmoved);
 	void Ruch(Figura* plansza[][8]);
+	bool GetHasMoved();
 };
