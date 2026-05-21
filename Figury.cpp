@@ -120,12 +120,16 @@ void EnPassant(int x, int y, Figura* plansza[][8], bool iswhite) {
 void PawnCapture(int x, int y, Figura* plansza[][8], bool iswhite) {
 
 	// lewo
-	if (plansza[x - 1][y + FuncIsWhite(iswhite)]->GetType() != Typ::PUSTEPOLE && x > 0 && iswhite != plansza[x - 1][y + FuncIsWhite(iswhite)]->GetIsWhite()) {
-		AddToPossibleMoves(x - 1, y + FuncIsWhite(iswhite));
+	if (x > 0) {
+		if (plansza[x - 1][y + FuncIsWhite(iswhite)]->GetType() != Typ::PUSTEPOLE && iswhite != plansza[x - 1][y + FuncIsWhite(iswhite)]->GetIsWhite()) {
+			AddToPossibleMoves(x - 1, y + FuncIsWhite(iswhite));
+		}
 	}
 	// prawo
-	if (plansza[x + 1][y + FuncIsWhite(iswhite)]->GetType() != Typ::PUSTEPOLE && x < 7 && iswhite != plansza[x + 1][y + FuncIsWhite(iswhite)]->GetIsWhite()) {
-		AddToPossibleMoves(x + 1, y + FuncIsWhite(iswhite));
+	if (x < 7) {
+		if (plansza[x + 1][y + FuncIsWhite(iswhite)]->GetType() != Typ::PUSTEPOLE && iswhite != plansza[x + 1][y + FuncIsWhite(iswhite)]->GetIsWhite()) {
+			AddToPossibleMoves(x + 1, y + FuncIsWhite(iswhite));
+		}
 	}
 	EnPassant(x, y, plansza, iswhite);
 }
@@ -150,7 +154,6 @@ void CastlesLeft(int x, int y, Figura* plansza[][8]) {
 	}
 	AddToPossibleMoves(0, y, true);
 }
-
 // Prawa Roszada
 void CastlesRight(int x, int y, Figura* plansza[][8]) {
 	
@@ -226,6 +229,15 @@ void Pionek::Ruch(Figura* plansza[][8]) {
 	
 	std::cout << "Ruch Pionka\n";
 
+	// Ruch o 1 pole do przodu
+	if (IsMoveOnBoard(x, y + (FuncIsWhite(isWhite))) == false) {
+		return;
+	}
+	if (isLegalMove(x, y + (FuncIsWhite(isWhite)), isWhite, plansza) == false) {
+		return;
+	}
+	AddToPossibleMoves(x, y + FuncIsWhite(isWhite));
+
 	// Ruch o 2 pola do przodu
 	if (MoveNumber == 0) {
 		if (IsMoveOnBoard(x, y + (FuncIsWhite(isWhite) * 2)) == false) {
@@ -236,14 +248,6 @@ void Pionek::Ruch(Figura* plansza[][8]) {
 		}
 		AddToPossibleMoves(x, y + (FuncIsWhite(isWhite) * 2));
 	}
-	// Ruch o 1 pole do przodu
-	if (IsMoveOnBoard(x, y + (FuncIsWhite(isWhite))) == false) {
-		return;
-	}
-	if (isLegalMove(x, y + (FuncIsWhite(isWhite)), isWhite, plansza) == false) {
-		return;
-	}
-	AddToPossibleMoves(x, y + FuncIsWhite(isWhite));
 
 	// Bicie Pionka
 	PawnCapture(x, y, plansza, isWhite);
