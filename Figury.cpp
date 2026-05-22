@@ -22,17 +22,17 @@ bool isLegalMove(int x, int y, bool IsSetFiguraWhite, Figura* plansza[][8]) {
 	if (plansza[x][y]->GetType() == Typ::PUSTEPOLE) {
 		return true;
 	}
-	else if (plansza[x][y]->GetIsWhite() != IsSetFiguraWhite) {
-		return true;
+	else if (plansza[x][y]->GetIsWhite() == IsSetFiguraWhite) {
+		return false;
 	}
 	else {
-		return false;
+		return true;
 	}
 }
 
 // funkcja dodająca możliwy ruch do tablicy PossibleMoves
 void AddToPossibleMoves(int x1, int y1, bool castles = false, bool enpassant = false) {
-	PossibleMoves[ilosc] = new PossibleMove{ x1, y1, castles};
+	PossibleMoves[ilosc] = new PossibleMove{ x1, y1, castles, enpassant};
 	ilosc++;
 }
 
@@ -61,13 +61,11 @@ void VerticalHorizontalMove(int x, int y, bool isWhite, Figura* plansza[][8]) {
 				continue;
 			}
 			if (isLegalMove(x + (offset[j][0] * i), y + (offset[j][1] * i), isWhite, plansza) == false) {
-				continue;
+				break;
 			}
 			AddToPossibleMoves(x + (offset[j][0] * i), y + (offset[j][1] * i));
 			if (plansza[x + (offset[j][0] * i)][y + (offset[j][1] * i)]->GetType() != Typ::PUSTEPOLE) {
-				j++;
-				i = 0;
-				continue;
+				break;
 			}
 		}
 	}
@@ -79,18 +77,16 @@ void SkosyMove(int x, int y, bool isWhite, Figura* plansza[][8]) {
 	
 	// Skosy
 	for (int j{ 0 }; j < 4; j++) {
-		for (int i{ 0 }; i < 8; i++) {
+		for (int i{ 1 }; i < 8; i++) {
 			if (IsMoveOnBoard(x + (offset[j][0] * i), y + (offset[j][1] * i)) == false) {
 				continue;
 			}
 			if (isLegalMove(x + (offset[j][0] * i), y + (offset[j][1] * i), isWhite, plansza) == false) {
-				continue;
+				break;
 			}
 			AddToPossibleMoves(x + (offset[j][0] * i), y + (offset[j][1] * i));
 			if (plansza[x + (offset[j][0] * i)][y + (offset[j][1] * i)]->GetType() != Typ::PUSTEPOLE) {
-				j++;
-				i = 0;
-				continue;
+				break;
 			}
 		}
 	}

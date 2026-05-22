@@ -6,7 +6,6 @@ struct PossibleMove {
 	bool castles;
 	bool enpassant;
 
-public:
 	void Show();
 };
 
