@@ -9,6 +9,10 @@ struct PossibleMove {
 	void Show();
 };
 
+inline bool blackchecked{ false };
+inline bool whitechecked{ false };
+inline bool gameplaying{ true };
+
 inline PossibleMove* PossibleMoves[64 * 32]{};
 inline int ilosc{0};
 

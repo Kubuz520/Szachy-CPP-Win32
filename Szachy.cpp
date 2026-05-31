@@ -21,7 +21,7 @@ void ShowPossibleMoves() {
 	}
 }
 
-// Wylacza 
+// Wylacza nielegalne ruchy
 void ExcludeIllegal() {
 	for (int i{ 0 }; i < TmpIlosc; i++) {
 		for (int j{ 0 }; j < illegalilosc; j++) {
@@ -33,7 +33,25 @@ void ExcludeIllegal() {
 			}
 		}
 	}
-	
+}
+
+// Sprawdza czy gra sie skonczyla TODO
+void Win(Figura* plansza[][8]) {
+
+}
+
+// Sprawdzanie czy pionek jest na koncu TODO
+void PawnPromotion(Figura* plansza[][8]) {
+	for (int x{ 0 };x < 8;x++) {
+		if (plansza[x][0]->GetType() == Typ::PIONEK) {
+			delete plansza[x][0];
+			plansza[x][0] = new Hetman(x, 0, true);
+		}
+		if (plansza[x][7]->GetType() == Typ::PIONEK) {
+			delete plansza[x][7];
+			plansza[x][7] = new Hetman(x, 7, false);
+		}
+	}
 }
 
 // Glowna petla programu
@@ -42,6 +60,9 @@ int main()
 	Plansza plansza;
 
 	do {
+		
+		Win(plansza.plansza);
+
 		ilosc = 0;
 		plansza.ShowAll();
 		int x{}; int y{};
@@ -53,17 +74,14 @@ int main()
 		plansza.GetFigura(x , y )->Ruch(plansza.plansza);
 		
 		TmpIlosc = ilosc;
-
+		illegalilosc = 0;
 		for (int i{ 0 }; i < ilosc; i++) {
 			TmpPossibleMoves[i] = PossibleMoves[i];
 		}
-
 		for (int i{ 0 }; i < TmpIlosc; i++) {
 			Checks(x, y, plansza.plansza, TmpPossibleMoves[i]);
 		}
-
 		ExcludeIllegal();
-
 		ShowPossibleMoves();
 
 		int r{};
@@ -78,7 +96,9 @@ int main()
 		std::cout << "\n";
 		ExecuteMove(x, y, plansza.plansza, currentmove);
 
-	} while (true);
+		PawnPromotion(plansza.plansza);
+
+	} while (gameplaying);
 	
 	
     return 0;
