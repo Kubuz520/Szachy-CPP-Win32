@@ -5,8 +5,10 @@
 
 void PossibleMove::Show()
 {
-	std::cout << "x: " << x << " y: " << y << "\n";
+	std::cout << "x: " << x << " y: " << y;
 	if (castles == true) {
-		std::cout << "Roszada" << "\n";
+		std::cout << " Roszada" << "\n";
+		return;
 	}
+	std::cout << "\n";
 }

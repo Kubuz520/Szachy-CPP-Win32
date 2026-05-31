@@ -17,17 +17,62 @@ void ShowPossibleMoves() {
 
 // Funkcja Wykonująca ruch
 void ExecuteMove(int x1, int y1, Figura* plansza[][8]) {
+
+	delete plansza[currentmove->x][currentmove->y];
+
 	if (currentmove->castles == true) {
-		return;
+
+		// sprawdzenie po ktorej stronie mamy roszade
+		bool leftcastle{};
+		if (currentmove->x == 0) {
+			leftcastle = true;
+		}
+		else {
+			leftcastle = false;
+		}
+
+		if (leftcastle == true) {
+			delete plansza[x1 - 2][y1];
+			delete plansza[x1 - 1][y1];
+			plansza[x1-2][y1] = new Krol(x1 - 2, y1, plansza[x1][y1]->GetIsWhite(), true);
+			plansza[x1-1][y1] = new Wieza(x1 - 1, y1, plansza[x1][y1]->GetIsWhite(), true);
+		}
+		else {
+			delete plansza[x1 + 2][y1];
+			delete plansza[x1 + 1][y1];
+			plansza[x1 + 2][y1] = new Krol(x1 + 2, y1, plansza[x1][y1]->GetIsWhite(), true);
+			plansza[x1 + 1][y1] = new Wieza(x1 + 1, y1, plansza[x1][y1]->GetIsWhite(), true);
+		}
+
+		delete plansza[x1][y1];
+		plansza[x1][y1] = new PustePole(x1, y1);
 	}
+
+	// Ruch EnPassant
 	if (currentmove->enpassant == true) {
+
+		if (plansza[x1][y1]->GetIsWhite() == true) {
+			delete plansza[currentmove->x][currentmove->y + 1];
+			plansza[currentmove->x][currentmove->y + 1] = new PustePole(currentmove->x, currentmove->y + 1);
+		}
+		else {
+			delete plansza[currentmove->x][currentmove->y - 1];
+			plansza[currentmove->x][currentmove->y - 1] = new PustePole(currentmove->x, currentmove->y - 1);
+		}
+
+		Figura* tmp = dynamic_cast<Pionek*>(plansza[x1][y1]);
+		plansza[currentmove->x][currentmove->y] = new Pionek(currentmove->x, currentmove->y, plansza[x1][y1]->GetIsWhite(), reinterpret_cast<Pionek*>(plansza[x1][y1])->MoveNumber + 1);
+
+		delete plansza[x1][y1];
+		plansza[x1][y1] = new PustePole(x1, y1);
+
 		return;
 	}
+	
 	
 	// Zamiana Pola Wybranego na Figure Poruszajaca się
-	delete plansza[currentmove->x][currentmove->y];
-	
 	Figura* tmp = dynamic_cast<Pionek*>(plansza[x1][y1]);
+
 	if (tmp != nullptr) {
 		plansza[currentmove->x][currentmove->y] = new Pionek(currentmove->x, currentmove->y, plansza[x1][y1]->GetIsWhite(), reinterpret_cast<Pionek*>(plansza[x1][y1])->MoveNumber + 1);
 	}
@@ -64,6 +109,7 @@ void ExecuteMove(int x1, int y1, Figura* plansza[][8]) {
 	
 }
 
+// Glowna petla programu
 int main()
 {
 	Plansza plansza;
