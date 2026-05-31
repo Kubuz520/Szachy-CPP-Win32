@@ -36,6 +36,12 @@
     <ClCompile Include="Global.cpp">
       <Filter>Pliki źródłowe\CPP</Filter>
     </ClCompile>
+    <ClCompile Include="SprawdzanieSzacha.cpp">
+      <Filter>Pliki źródłowe\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="ExecuteMove.cpp">
+      <Filter>Pliki źródłowe\CPP</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TypEnum.h">
@@ -48,6 +54,12 @@
       <Filter>Pliki źródłowe\Naglowki</Filter>
     </ClInclude>
     <ClInclude Include="Global.h">
+      <Filter>Pliki źródłowe\Naglowki</Filter>
+    </ClInclude>
+    <ClInclude Include="SprawdzanieSzacha.h">
+      <Filter>Pliki źródłowe\Naglowki</Filter>
+    </ClInclude>
+    <ClInclude Include="ExecuteMove.h">
       <Filter>Pliki źródłowe\Naglowki</Filter>
     </ClInclude>
   </ItemGroup>

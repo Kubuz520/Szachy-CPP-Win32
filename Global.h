@@ -9,5 +9,8 @@ struct PossibleMove {
 	void Show();
 };
 
-inline PossibleMove* PossibleMoves[64]{};
+inline PossibleMove* PossibleMoves[64 * 32]{};
 inline int ilosc{0};
+
+inline PossibleMove* IllegalMoves[64]{};
+inline int illegalilosc{ 0 };

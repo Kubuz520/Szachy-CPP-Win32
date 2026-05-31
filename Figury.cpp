@@ -223,7 +223,7 @@ Pionek::Pionek(int x1, int y1, bool isWhite1, int movenumber1) {
 
 void Pionek::Ruch(Figura* plansza[][8]) {
 	
-	std::cout << "Ruch Pionka\n";
+	//std::cout << "Ruch Pionka\n";
 
 	// Ruch o 1 pole do przodu
 	if (IsMoveOnBoard(x, y + (FuncIsWhite(isWhite))) == false) {
@@ -260,7 +260,7 @@ Skoczek::Skoczek(int x1, int y1, bool isWhite1) {
 
 void Skoczek::Ruch(Figura* plansza[][8]) {
 	
-	std::cout << "Ruch Skoczka\n";
+	//std::cout << "Ruch Skoczka\n";
 	int offset[8][2] = { {1, 2}, {1, -2}, 
 						{-1, 2}, {-1, -2}, 
 						{2, 1}, {2, -1}, 
@@ -288,7 +288,7 @@ Goniec::Goniec(int x1, int y1, bool isWhite1) {
 
 void Goniec::Ruch(Figura* plansza[][8]) {
 	ilosc = 0;
-	std::cout << "Ruch Gonca\n";
+	//std::cout << "Ruch Gonca\n";
 	// Ruch po przekątnej
 	SkosyMove(x, y, isWhite, plansza);
 }
@@ -304,7 +304,7 @@ Wieza::Wieza(int x1, int y1, bool isWhite1, bool hasmoved1) {
 
 void Wieza::Ruch(Figura* plansza[][8]) {
 	
-	std::cout << "Ruch Wiezy\n";
+	//std::cout << "Ruch Wiezy\n";
 	// Ruch w prawo, lewo, do góry i do dołu
 	VerticalHorizontalMove(x, y, isWhite, plansza);
 }
@@ -323,7 +323,7 @@ Hetman::Hetman(int x1, int y1, bool isWhite1) {
 
 void Hetman::Ruch(Figura* plansza[][8]) {
 	
-	std::cout << "Ruch Hetmana\n";
+	//std::cout << "Ruch Hetmana\n";
 	// Ruch w prawo, lewo, do góry i do dołu
 	VerticalHorizontalMove(x, y, isWhite, plansza);
 	// Ruch po przekątnej
