@@ -39,28 +39,46 @@ void ExcludeIllegal() {
 // Sprawdza czy gra sie skonczyla
 void Win(Figura* plansza[][8]) {
 
+	int Ruchy[64*16][2]{};
+
+	illegalilosc = 0;
 	ilosc = 0;
-	// Szach Czarnych na Białych
+	// Szach bialych koniec na czarnych -------
 	for (int x{ 0 };x < 8;x++) {
 		for (int y{ 0 };y < 8;y++) {
 			if (plansza[x][y]->GetIsWhite() == true) {
 				continue;
 			}
+			int iloscruchow{ ilosc};
 			plansza[x][y]->Ruch(plansza);
+			// Dodanie Ruchow do tablicy Ruchy
+			for (int i{iloscruchow};i < ilosc;i++) {
+				Ruchy[i][0] = x;
+				Ruchy[i][1] = y;
+			}
 		}
 	}
-	for (int i{ 0 };i < ilosc;i++) {
+	
+	int tmpilosc{ ilosc-1 };
+
+	blackendgame = true;
+	for (int i{ 0 };i < tmpilosc;i++) {
 		if (plansza[PossibleMoves[i]->x][PossibleMoves[i]->y]->GetType() == Typ::KROL) {
 			whitechecked = true;
 			break;
 		}
 		whitechecked = false;
 	}
+	for (int i{ 0 };i < tmpilosc;i++) {
+		if (Checkmate(Ruchy[i][0], Ruchy[i][1], plansza, PossibleMoves[i]) != true) { blackendgame = false; }
+	}
 	std::cout << "Szach na Bialych? " << whitechecked<<"\n";
+	std::cout << "Koniec Czarnych " << blackendgame << "\n";
 
 
+	illegalilosc = 0;
 	ilosc = 0;
-	// Szach Bialych na Czarnych
+	// Szach na czarnych koniec bialych -------
 	for (int x{ 0 };x < 8;x++) {
 		for (int y{ 0 };y < 8;y++) {
 			if (plansza[x][y]->GetIsWhite() == false) {
@@ -69,20 +87,48 @@ void Win(Figura* plansza[][8]) {
 			plansza[x][y]->Ruch(plansza);
 		}
 	}
-	for (int i{ 0 };i < ilosc;i++) {
+
+	tmpilosc = ilosc-1;
+
+	whiteendgame = true;
+	for (int i{ 0 };i < tmpilosc;i++) {
 		if (plansza[PossibleMoves[i]->x][PossibleMoves[i]->y]->GetType() == Typ::KROL) {
 			blackchecked = true;
 			break;
 		}
 		blackchecked = false;
 	}
+	for (int i{ 0 };i < tmpilosc;i++) {
+		if (Checkmate(Ruchy[i][0], Ruchy[i][1], plansza, PossibleMoves[i]) != true) { whiteendgame = false; }
+	}
 	std::cout << "Szach na Czarnych? " << blackchecked << "\n";
-	
-	// Sprawdzanie Mata i Pata
+	std::cout << "Koniec Bialych " << whiteendgame << "\n";
 
 }
 
-// Sprawdzanie czy pionek jest na koncu TODO
+// Sprawdzanie Czy jak ktos przegral to jest Pat czy Mat
+void WinOrDraw() {
+	if (whiteendgame == true) {
+		if (whitechecked == true) {
+			std::cout << "Biali Przegrali" << "\n";
+		}
+		else {
+			std::cout << "Shach Pat" << "\n";
+		}
+		gameplaying = false;
+	}
+	else if (blackendgame == true) {
+		if (blackchecked == true) {
+			std::cout << "Czarni Przegrali" << "\n";
+		}
+		else {
+			std::cout << "Shach Pat" << "\n";
+		}
+		gameplaying = false;
+	}
+}
+
+// Sprawdzanie czy pionek jest na koncu
 void PawnPromotion(Figura* plansza[][8]) {
 	for (int x{ 0 };x < 8;x++) {
 		if (plansza[x][0]->GetType() == Typ::PIONEK) {
@@ -104,6 +150,7 @@ int main()
 	do {
 		
 		Win(plansza.plansza);
+		WinOrDraw();
 
 		ilosc = 0;
 		plansza.ShowAll();
