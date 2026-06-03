@@ -25,18 +25,60 @@ void ShowPossibleMoves() {
 void ExcludeIllegal() {
 	for (int i{ 0 }; i < TmpIlosc; i++) {
 		for (int j{ 0 }; j < illegalilosc; j++) {
-			if (TmpPossibleMoves[i] == IllegalMoves[j]) {
-				TmpIlosc--;
-				for (int t{ i };t < TmpIlosc;t++) {
-					TmpPossibleMoves[i] = TmpPossibleMoves[i + 1];
-				}
+			if (TmpPossibleMoves[i] != IllegalMoves[j]) {
+				continue;
+			}
+			TmpIlosc--;
+			for (int t{ i };t < TmpIlosc;t++) {
+				TmpPossibleMoves[t] = TmpPossibleMoves[t + 1];
 			}
 		}
 	}
 }
 
-// Sprawdza czy gra sie skonczyla TODO
+// Sprawdza czy gra sie skonczyla
 void Win(Figura* plansza[][8]) {
+
+	ilosc = 0;
+	// Szach Czarnych na Białych
+	for (int x{ 0 };x < 8;x++) {
+		for (int y{ 0 };y < 8;y++) {
+			if (plansza[x][y]->GetIsWhite() == true) {
+				continue;
+			}
+			plansza[x][y]->Ruch(plansza);
+		}
+	}
+	for (int i{ 0 };i < ilosc;i++) {
+		if (plansza[PossibleMoves[i]->x][PossibleMoves[i]->y]->GetType() == Typ::KROL) {
+			whitechecked = true;
+			break;
+		}
+		whitechecked = false;
+	}
+	std::cout << "Szach na Bialych? " << whitechecked<<"\n";
+
+
+	ilosc = 0;
+	// Szach Bialych na Czarnych
+	for (int x{ 0 };x < 8;x++) {
+		for (int y{ 0 };y < 8;y++) {
+			if (plansza[x][y]->GetIsWhite() == false) {
+				continue;
+			}
+			plansza[x][y]->Ruch(plansza);
+		}
+	}
+	for (int i{ 0 };i < ilosc;i++) {
+		if (plansza[PossibleMoves[i]->x][PossibleMoves[i]->y]->GetType() == Typ::KROL) {
+			blackchecked = true;
+			break;
+		}
+		blackchecked = false;
+	}
+	std::cout << "Szach na Czarnych? " << blackchecked << "\n";
+	
+	// Sprawdzanie Mata i Pata
 
 }
 

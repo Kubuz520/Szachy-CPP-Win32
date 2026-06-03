@@ -287,7 +287,7 @@ Goniec::Goniec(int x1, int y1, bool isWhite1) {
 }
 
 void Goniec::Ruch(Figura* plansza[][8]) {
-	ilosc = 0;
+	
 	//std::cout << "Ruch Gonca\n";
 	// Ruch po przekątnej
 	SkosyMove(x, y, isWhite, plansza);

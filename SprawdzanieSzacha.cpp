@@ -7,8 +7,8 @@ void Checks(int x1, int y1, Figura* plansza[][8], PossibleMove* currentmove) {
 	Plansza tmpPlansza;
 
 	// Przestawianie istniejacej planszy do tymczasowej
-	for (int x{ 0 };x < 7;x++) {
-		for (int y{ 0 };y < 7;y++) {
+	for (int x{ 0 };x < 8;x++) {
+		for (int y{ 0 };y < 8;y++) {
 			delete tmpPlansza.plansza[x][y];
 
 			Figura* tmp = dynamic_cast<Pionek*>(plansza[x][y]);
@@ -60,8 +60,8 @@ void Checks(int x1, int y1, Figura* plansza[][8], PossibleMove* currentmove) {
 
 	// Stworzenie listy wszystkich ruchow
 	ilosc = 0;
-	for (int y{ 0 };y < 7;y++) {
-		for (int x{ 0 };x < 7;x++) {
+	for (int y{ 0 };y < 8;y++) {
+		for (int x{ 0 };x < 8;x++) {
 			if (tmpPlansza.plansza[x][y]->GetType() == Typ::PUSTEPOLE) {
 				continue;
 			}
@@ -72,6 +72,9 @@ void Checks(int x1, int y1, Figura* plansza[][8], PossibleMove* currentmove) {
 	// Sprawdzenie czy jakis ruch atakuje krola
 	for (int i{ 0 }; i < ilosc; i++) {
 		if (tmpPlansza.plansza[PossibleMoves[i]->x][PossibleMoves[i]->y]->GetType() == Typ::KROL) {
+			if (plansza[x1][y1]->GetIsWhite() != tmpPlansza.plansza[PossibleMoves[i]->x][PossibleMoves[i]->y]->GetIsWhite()) {
+				continue;
+			}
 			std::cout << "\n";
 			std::cout << "Ruch Niepoprawny \n";
 			IllegalMoves[illegalilosc] = currentmove;
